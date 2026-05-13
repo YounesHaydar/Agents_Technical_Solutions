@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 import type { Project } from '../types';
 
@@ -32,12 +33,12 @@ export default function ProjectPreviewCard({ project }: ProjectPreviewCardProps)
       <Link href={`/projects/${project?._id ?? ''}`} className="block">
         <div className="aspect-video bg-zinc-200 dark:bg-zinc-950/80">
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl}
               alt={project?.title ? `${project.title} preview` : 'Project preview'}
+              width={1280}
+              height={720}
               className="h-full w-full object-cover"
-              loading="lazy"
-              decoding="async"
             />
           ) : null}
         </div>

@@ -31,7 +31,7 @@ export async function DELETE(_request: Request, { params }: { params: { id?: str
 
     const data = await res.json();
     return NextResponse.json({ ok: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

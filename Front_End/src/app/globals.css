@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
+  color-scheme: light;
+  --background: #f4f7fb;
   --foreground: #0f172a;
-  --muted: #475569;
-  --accent: #1d4ed8;
-  --accent-strong: #172554;
-  --panel: rgba(255, 255, 255, 0.74);
+  --muted: #42526e;
+  --accent: #2563eb;
+  --accent-strong: #0f172a;
+  --panel: rgba(255, 255, 255, 0.7);
 }
 
 @theme inline {
@@ -20,23 +21,25 @@
 /* Support both prefers-color-scheme and .dark class */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --background: #020617;
-    --foreground: #e2e8f0;
-    --muted: #94a3b8;
-    --accent: #60a5fa;
+    color-scheme: dark;
+    --background: #020816;
+    --foreground: #f8fbff;
+    --muted: #b1bfd6;
+    --accent: #67e8f9;
     --accent-strong: #dbeafe;
-    --panel: rgba(15, 23, 42, 0.72);
+    --panel: rgba(7, 14, 30, 0.74);
   }
 }
 
 /* When the .dark class is set on <html> (class-based dark mode), override variables */
 .dark {
-  --background: #020617;
-  --foreground: #e2e8f0;
-  --muted: #94a3b8;
-  --accent: #60a5fa;
+  color-scheme: dark;
+  --background: #020816;
+  --foreground: #f8fbff;
+  --muted: #b1bfd6;
+  --accent: #67e8f9;
   --accent-strong: #dbeafe;
-  --panel: rgba(15, 23, 42, 0.72);
+  --panel: rgba(7, 14, 30, 0.74);
 }
 
 html {
@@ -47,6 +50,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-plex-sans), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
@@ -200,6 +205,23 @@ body {
 
 .dark .glass-panel {
   box-shadow: 0 24px 90px rgba(2, 6, 23, 0.5);
+}
+
+.dark body {
+  color: var(--foreground);
+}
+
+.dark .text-muted {
+  color: var(--muted);
+}
+
+.dark .accent-text {
+  color: var(--accent);
+}
+
+.dark .headline-serif,
+.dark .mono-accent {
+  color: var(--foreground);
 }
 
 .section-grid {

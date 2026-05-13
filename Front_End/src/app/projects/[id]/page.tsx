@@ -15,24 +15,6 @@ type ProjectDetailPageProps = {
   }>;
 };
 
-function getPlatformDisplayName(url?: string): string {
-  if (!url) return 'Social';
-  
-  const lowerUrl = url.toLowerCase();
-  if (lowerUrl.includes('facebook.com')) return 'Facebook';
-  if (lowerUrl.includes('instagram.com')) return 'Instagram';
-  if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'X';
-  if (lowerUrl.includes('linkedin.com')) return 'LinkedIn';
-  if (lowerUrl.includes('github.com')) return 'GitHub';
-  if (lowerUrl.includes('youtube.com')) return 'YouTube';
-  if (lowerUrl.includes('tiktok.com')) return 'TikTok';
-  if (lowerUrl.includes('pinterest.com')) return 'Pinterest';
-  if (lowerUrl.includes('behance.net')) return 'Behance';
-  if (lowerUrl.includes('dribbble.com')) return 'Dribbble';
-  
-  return 'Social Link';
-}
-
 function formatDate(date?: string) {
   if (!date) {
     return null;

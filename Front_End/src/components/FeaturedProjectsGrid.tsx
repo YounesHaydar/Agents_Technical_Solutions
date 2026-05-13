@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
@@ -16,15 +17,6 @@ const item = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120, damping: 16 } },
 };
-
-const descriptionVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120, damping: 16 } },
-};
-
-const MotionDiv = motion.div as any;
-const MotionP = motion.p as any;
-const MotionButton = motion.button as any;
 
 export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { projects: Project[]; fullWidth?: boolean }) {
   const router = useRouter();
@@ -44,7 +36,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
   return (
     <div className={`grid gap-6 ${fullWidth ? 'grid-cols-1' : 'sm:grid-cols-2 mt-10'}`}>
       {projects.map((p, idx) => (
-        <MotionDiv 
+        <motion.div 
           key={p._id ?? idx} 
           variants={item} 
           initial="hidden" 
@@ -57,12 +49,12 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
                 const first = p.images?.[0];
                 const url = !first ? undefined : typeof first === 'string' ? first : first.asset?.url;
                 return url ? (
-                  <img
+                  <Image
                     src={url}
                     alt={p.title}
+                    width={1280}
+                    height={720}
                     className="h-full w-full object-cover blur-up transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
                     onLoad={(e) => (e.currentTarget.classList.remove('blur-up'))}
                   />
                 ) : null;
@@ -74,7 +66,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
               </div>
               
               {/* Description overlay on hover */}
-              <MotionDiv
+              <motion.div
                 initial="hidden"
                 whileHover="visible"
                 variants={{
@@ -91,7 +83,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
                 }}
                 className="absolute inset-0 bg-black/85 p-6 flex flex-col justify-end"
               >
-                <MotionP
+                <motion.p
                   variants={{
                     hidden: { y: 20, opacity: 0 },
                     visible: { y: 0, opacity: 1 }
@@ -99,28 +91,28 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
                   className="text-sm text-white/95 leading-relaxed mb-4 dark:text-slate-100"
                 >
                   {p.description}
-                </MotionP>
+                </motion.p>
                 <div className="flex gap-4">
-                  <MotionButton
-                    onClick={(e: any) => { e.stopPropagation(); e.preventDefault(); router.push(`/projects/${p._id ?? ''}`); }}
+                  <motion.button
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); e.preventDefault(); router.push(`/projects/${p._id ?? ''}`); }}
                     variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
                     className="text-blue-400 hover:text-blue-300 font-semibold transition-colors w-fit bg-transparent"
                   >
                     Read More →
-                  </MotionButton>
+                  </motion.button>
 
-                  <MotionButton
-                    onClick={async (e: any) => { e.stopPropagation(); e.preventDefault(); await handleDelete(p._id); }}
+                  <motion.button
+                    onClick={async (e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); e.preventDefault(); await handleDelete(p._id); }}
                     variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
                     className="text-red-400 hover:text-red-300 font-semibold transition-colors w-fit bg-transparent"
                   >
                     Delete
-                  </MotionButton>
+                  </motion.button>
                 </div>
-              </MotionDiv>
+              </motion.div>
             </div>
           </Link>
-        </MotionDiv>
+        </motion.div>
       ))}
     </div>
   );

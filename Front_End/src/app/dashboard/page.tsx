@@ -85,22 +85,23 @@ const texts = {
 } as const;
 
 export default function DashboardPage() {
-  const [language, setLanguage] = useState<Language>('en');
-  const [mounted, setMounted] = useState(false);
+  const [language] = useState<Language>(() => {
+    if (typeof window === 'undefined') {
+      return 'en';
+    }
+
+    return (localStorage.getItem('language') as Language | null) || 'en';
+  });
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const t = texts[(language === 'ar' ? 'ar' : 'en') as Language];
-  const isRTL = language === 'ar';
 
   useEffect(() => {
-    setMounted(true);
-    const savedLanguage = (localStorage.getItem('language') as Language | null) || 'en';
-    setLanguage(savedLanguage);
-    document.documentElement.lang = savedLanguage;
-    document.documentElement.dir = savedLanguage === 'ar' ? 'rtl' : 'ltr';
-  }, []);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  }, [language]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -155,10 +156,6 @@ export default function DashboardPage() {
       setIsSubmitting(false);
     }
   };
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <main className="min-h-screen text-zinc-950 dark:text-zinc-100">

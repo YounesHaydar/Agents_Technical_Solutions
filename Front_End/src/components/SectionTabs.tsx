@@ -46,7 +46,6 @@ export default function SectionTabs() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabsRef = useRef<Array<HTMLAnchorElement | null>>([]);
-  const indicatorRef = useRef<HTMLSpanElement | null>(null);
 
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
 
@@ -77,7 +76,7 @@ export default function SectionTabs() {
     if (active) {
       try {
         history.replaceState(null, '', `#${active}`);
-      } catch (e) {
+      } catch {
         /* ignore */
       }
     }

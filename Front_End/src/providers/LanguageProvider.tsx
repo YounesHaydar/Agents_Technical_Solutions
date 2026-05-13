@@ -13,19 +13,18 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en');
-  const [mounted, setMounted] = useState(false);
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window === 'undefined') {
+      return 'en';
+    }
+
+    return (localStorage.getItem('language') as Language | null) || 'en';
+  });
 
   useEffect(() => {
-    setMounted(true);
-    // Get language from localStorage
-    const savedLanguage = localStorage.getItem('language') as Language | null;
-    const initialLanguage = savedLanguage || 'en';
-    
-    setLanguageState(initialLanguage);
-    document.documentElement.lang = initialLanguage;
-    document.documentElement.dir = initialLanguage === 'ar' ? 'rtl' : 'ltr';
-  }, []);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
@@ -33,10 +32,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   };
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, isRTL: language === 'ar' }}>

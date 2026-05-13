@@ -34,24 +34,14 @@ const workflowSteps = [
   "Publish with a durable editing workflow",
 ];
 
-const metrics = [
-  { value: "03", label: "Core routes" },
-  { value: "01", label: "Studio-backed CMS" },
-  { value: "∞", label: "Reusable content system" },
-];
-
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getProjects().then((data) => {
       setProjects(data ?? []);
-      setIsLoading(false);
     });
   }, []);
-
-  const hero = projects?.slice(0, 2) ?? [];
 
   return (
     <main

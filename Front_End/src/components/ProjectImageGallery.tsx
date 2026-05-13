@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useRef } from 'react';
 import { useLanguage } from '../providers/LanguageProvider';
 
@@ -24,6 +25,15 @@ export default function ProjectImageGallery({ images = [], title }: ProjectImage
 
   const currentImage = images?.[activeIndex];
 
+  type FullscreenElement = HTMLDivElement & {
+    webkitRequestFullscreen?: () => Promise<void> | void;
+  };
+
+  type FullscreenDocument = Document & {
+    webkitFullscreenElement?: Element | null;
+    webkitExitFullscreen?: () => Promise<void> | void;
+  };
+
   const handlePrevious = () => {
     setActiveIndex((current) => (current - 1 + images.length) % images.length);
   };
@@ -36,18 +46,21 @@ export default function ProjectImageGallery({ images = [], title }: ProjectImage
     if (!imageContainerRef.current) return;
 
     try {
+      const container = imageContainerRef.current as FullscreenElement;
+      const fullscreenDocument = document as FullscreenDocument;
+
       if (!isFullscreen) {
-        if (imageContainerRef.current.requestFullscreen) {
-          await imageContainerRef.current.requestFullscreen();
-        } else if ((imageContainerRef.current as any).webkitRequestFullscreen) {
-          await (imageContainerRef.current as any).webkitRequestFullscreen();
+        if (container.requestFullscreen) {
+          await container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          await container.webkitRequestFullscreen();
         }
         setIsFullscreen(true);
       } else {
-        if (document.fullscreenElement) {
-          await document.exitFullscreen();
-        } else if ((document as any).webkitFullscreenElement) {
-          await (document as any).webkitExitFullscreen();
+        if (fullscreenDocument.fullscreenElement) {
+          await fullscreenDocument.exitFullscreen();
+        } else if (fullscreenDocument.webkitFullscreenElement) {
+          await fullscreenDocument.webkitExitFullscreen?.();
         }
         setIsFullscreen(false);
       }
@@ -62,9 +75,11 @@ export default function ProjectImageGallery({ images = [], title }: ProjectImage
         ref={imageContainerRef}
         className="overflow-hidden rounded-3xl border border-zinc-300 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950/80 relative group"
       >
-        <img
+        <Image
           src={currentImage}
           alt={title ? `${title} image ${activeIndex + 1}` : `Project image ${activeIndex + 1}`}
+          width={1280}
+          height={720}
           className="aspect-video h-full w-full object-cover"
         />
         <button

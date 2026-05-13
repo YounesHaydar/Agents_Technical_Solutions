@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 
 type TextId =
@@ -46,13 +46,14 @@ const DICT: Record<string, { en: string; ar: string }> = {
 };
 
 export default function TranslatedText({ id }: { id: TextId }) {
-  const [language, setLanguage] = useState<'en' | 'ar'>('en');
+  const [language] = useState<'en' | 'ar'>(() => {
+    if (typeof window === 'undefined') {
+      return 'en';
+    }
 
-  useEffect(() => {
     const storedLanguage = localStorage.getItem('language') as 'en' | 'ar' | null;
-    const resolvedLanguage = storedLanguage ?? (document.documentElement.lang === 'ar' ? 'ar' : 'en');
-    setLanguage(resolvedLanguage === 'ar' ? 'ar' : 'en');
-  }, []);
+    return storedLanguage ?? (document.documentElement.lang === 'ar' ? 'ar' : 'en');
+  });
 
   const entry = DICT[id];
   if (!entry) return null;
