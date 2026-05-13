@@ -5,12 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../providers/LanguageProvider';
 
 type Project = {
   _id?: string;
-  title?: string;
-  description?: string;
-  images?: Array<{ asset?: { url?: string } } | string> | string[];
+  titleEn?: string;
+  titleAr?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
+  images?: string[];
 };
 
 const item = {
@@ -20,6 +23,7 @@ const item = {
 
 export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { projects: Project[]; fullWidth?: boolean }) {
   const router = useRouter();
+  const { language } = useLanguage();
 
   async function handleDelete(id?: string) {
     if (!id) return;
@@ -33,25 +37,33 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
       alert('Failed to delete project');
     }
   }
+
+  const getTitle = (project: Project) => {
+    return language === 'ar' ? project.titleAr : project.titleEn;
+  };
+
+  const getDescription = (project: Project) => {
+    return language === 'ar' ? project.descriptionAr : project.descriptionEn;
+  };
+
   return (
     <div className={`grid gap-6 ${fullWidth ? 'grid-cols-1' : 'sm:grid-cols-2 mt-10'}`}>
       {projects.map((p, idx) => (
         <motion.div 
           key={p._id ?? idx} 
           variants={item} 
-          initial="hidden" 
-          whileInView="visible"
+          initial="visible" 
+          animate="visible"
           className="group overflow-hidden rounded-3xl bg-white/80 dark:bg-slate-900/60 panel-border shadow-lg"
         >
           <Link href={`/projects/${p._id ?? ''}`} className="block">
             <div className="relative h-64 w-full bg-zinc-200 dark:bg-zinc-950/60 overflow-hidden">
               {(() => {
                 const first = p.images?.[0];
-                const url = !first ? undefined : typeof first === 'string' ? first : first.asset?.url;
-                return url ? (
+                return first ? (
                   <Image
-                    src={url}
-                    alt={p.title}
+                    src={first}
+                    alt={getTitle(p) || 'Project image'}
                     width={1280}
                     height={720}
                     className="h-full w-full object-cover blur-up transition-transform duration-500 group-hover:scale-105"
@@ -62,7 +74,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
               {/* Initial gradient and title overlay */}
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent pointer-events-none group-hover:opacity-0 transition-opacity duration-300" />
               <div className="absolute inset-x-0 bottom-0 p-6 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                <h3 className="text-2xl font-semibold text-white">{p.title}</h3>
+                <h3 className="text-2xl font-semibold text-white">{getTitle(p)}</h3>
               </div>
               
               {/* Description overlay on hover */}
@@ -90,7 +102,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
                   }}
                   className="text-sm text-white/95 leading-relaxed mb-4 dark:text-slate-100"
                 >
-                  {p.description}
+                  {getDescription(p)}
                 </motion.p>
                 <div className="flex gap-4">
                   <motion.button

@@ -117,10 +117,10 @@ export default function HomePage() {
                         style={{ animationDelay: `${idx * 80}ms` }}
                       >
                         <div className="rounded-2xl border border-slate-200/80 bg-white/75 p-4 dark:border-slate-800 dark:bg-slate-950/60">
-                          <div className="text-sm font-medium text-slate-900 dark:text-white">
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white">
                             {item}
                           </div>
-                          <div className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                          <div className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300 font-medium">
                             {item === "Structure" &&
                               "Clear hierarchy and modular sections."}
                             {item === "Content" &&
@@ -207,9 +207,8 @@ export default function HomePage() {
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
-                  initial={{ opacity: 0, x: -28 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  initial={{ opacity: 1, x: 0 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{
                     type: "spring",
                     stiffness: 140,

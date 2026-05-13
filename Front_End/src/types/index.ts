@@ -1,12 +1,16 @@
 export type ProjectSocialLink = {
   platform?: string;
   url?: string;
+  labelEn?: string;
+  labelAr?: string;
 };
 
 export type Project = {
   _id: string;
-  title?: string;
-  description?: string;
+  titleEn?: string;
+  titleAr?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   completionDate?: string;
   images?: string[];
   coverPhoto?: string;

@@ -1,4 +1,4 @@
-import type { Project, ProjectSocialLink } from '../types';
+import type { Project } from '../types';
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production';
@@ -12,14 +12,23 @@ type SanityImage = {
   alt?: string;
 };
 
+type SanityProjectSocialLink = {
+  platform?: string;
+  url?: string;
+  labelEn?: string;
+  labelAr?: string;
+};
+
 type SanityProject = {
   _id?: string;
-  title?: string;
-  description?: string;
+  titleEn?: string;
+  titleAr?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   completionDate?: string;
   images?: SanityImage[];
   coverPhoto?: SanityImage;
-  socialLinks?: ProjectSocialLink[];
+  socialLinks?: SanityProjectSocialLink[];
   client?: string;
   featured?: boolean;
 };
@@ -31,14 +40,18 @@ type SanityResponse = {
 function toProject(project?: SanityProject): Project {
   return {
     _id: project?._id ?? '',
-    title: project?.title,
-    description: project?.description,
+    titleEn: project?.titleEn,
+    titleAr: project?.titleAr,
+    descriptionEn: project?.descriptionEn,
+    descriptionAr: project?.descriptionAr,
     completionDate: project?.completionDate,
     images: project?.images?.map((image) => image?.asset?.url).filter((url): url is string => Boolean(url)),
     coverPhoto: project?.coverPhoto?.asset?.url,
     socialLinks: project?.socialLinks?.map((link) => ({
       platform: link?.platform,
       url: link?.url,
+      labelEn: link?.labelEn,
+      labelAr: link?.labelAr,
     })),
     client: project?.client,
     featured: project?.featured,
@@ -64,7 +77,7 @@ async function sanityFetch<T>(query: string) {
 
 export async function getProjects(): Promise<Project[]> {
   const data = await sanityFetch<SanityResponse>(
-    '*[_type == "project"] | order(coalesce(completionDate, _createdAt) desc){_id, title, description, completionDate, images[]{asset->{url}, alt}, coverPhoto{asset->{url}, alt}, socialLinks[]{platform, url}, client, featured}'
+    '*[_type == "project"] | order(coalesce(completionDate, _createdAt) desc){_id, titleEn, titleAr, descriptionEn, descriptionAr, completionDate, images[]{asset->{url}, alt}, coverPhoto{asset->{url}, alt}, socialLinks[]{platform, url, labelEn, labelAr}, client, featured}'
   );
 
   if (!data?.result || !Array.isArray(data.result)) {
@@ -76,7 +89,7 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProjectById(id: string): Promise<Project | null> {
   const data = await sanityFetch<SanityResponse>(
-    `*[_type == "project" && _id == "${id}"][0]{_id, title, description, completionDate, images[]{asset->{url}, alt}, coverPhoto{asset->{url}, alt}, socialLinks[]{platform, url}, client, featured}`
+    `*[_type == "project" && _id == "${id}"][0]{_id, titleEn, titleAr, descriptionEn, descriptionAr, completionDate, images[]{asset->{url}, alt}, coverPhoto{asset->{url}, alt}, socialLinks[]{platform, url, labelEn, labelAr}, client, featured}`
   );
 
   if (!data?.result || Array.isArray(data.result)) {
