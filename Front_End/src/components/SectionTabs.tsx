@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function SectionTabs() {
   const [visible, setVisible] = useState(false);
-  const [active, setActive] = useState<'about' | 'services' | 'projects' | null>(null);
+  const [active, setActive] = useState<'about' | 'services' | 'projects-showcase' | null>(null);
 
   useEffect(() => {
     const sentinel = document.getElementById('hero-end');
@@ -26,14 +26,14 @@ export default function SectionTabs() {
     const sections: Array<{ id: 'about' | 'services' | 'projects'; el: Element | null }> = [
       { id: 'about', el: document.getElementById('about') },
       { id: 'services', el: document.getElementById('services') },
-      { id: 'projects', el: document.getElementById('projects') },
+      { id: 'projects-showcase', el: document.getElementById('projects-showcase') },
     ];
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visibleSections = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (visibleSections.length) {
-          const id = visibleSections[0].target.id as 'about' | 'services' | 'projects';
+          const id = visibleSections[0].target.id as 'about' | 'services' | 'projects-showcase';
           setActive(id);
         }
       },
@@ -110,7 +110,7 @@ export default function SectionTabs() {
           <a ref={(el) => { tabsRef.current[1] = el; }} href="#services" className={`px-3 py-1 text-sm font-medium ${active === 'services' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
             Services
           </a>
-          <a ref={(el) => { tabsRef.current[2] = el; }} href="#projects" className={`px-3 py-1 text-sm font-medium ${active === 'projects' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
+          <a ref={(el) => { tabsRef.current[2] = el; }} href="#projects-showcase" className={`px-3 py-1 text-sm font-medium ${active === 'projects-showcase' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
             Projects
           </a>
           <motion.span
