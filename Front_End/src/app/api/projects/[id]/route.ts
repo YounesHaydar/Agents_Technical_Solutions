@@ -5,8 +5,11 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production';
 const apiVersion = 'v2021-10-21';
 const token = process.env.SANITY_API_TOKEN;
 
-export async function DELETE(_request: Request, { params }: { params: { id?: string } }) {
-  const id = params?.id;
+export async function DELETE(
+  _request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { id } = await context.params;
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
   if (!projectId) return NextResponse.json({ error: 'Missing SANITY project id' }, { status: 500 });
   if (!token) return NextResponse.json({ error: 'Missing SANITY_API_TOKEN' }, { status: 500 });

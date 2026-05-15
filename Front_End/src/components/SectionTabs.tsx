@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function SectionTabs() {
+  type SectionId = 'about' | 'services' | 'projects-showcase';
+
   const [visible, setVisible] = useState(false);
-  const [active, setActive] = useState<'about' | 'services' | 'projects-showcase' | null>(null);
+  const [active, setActive] = useState<SectionId | null>(null);
 
   useEffect(() => {
     const sentinel = document.getElementById('hero-end');
@@ -23,7 +25,7 @@ export default function SectionTabs() {
   }, []);
 
   useEffect(() => {
-    const sections: Array<{ id: 'about' | 'services' | 'projects'; el: Element | null }> = [
+    const sections: Array<{ id: SectionId; el: Element | null }> = [
       { id: 'about', el: document.getElementById('about') },
       { id: 'services', el: document.getElementById('services') },
       { id: 'projects-showcase', el: document.getElementById('projects-showcase') },
@@ -33,7 +35,7 @@ export default function SectionTabs() {
       (entries) => {
         const visibleSections = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (visibleSections.length) {
-          const id = visibleSections[0].target.id as 'about' | 'services' | 'projects-showcase';
+          const id = visibleSections[0].target.id as SectionId;
           setActive(id);
         }
       },

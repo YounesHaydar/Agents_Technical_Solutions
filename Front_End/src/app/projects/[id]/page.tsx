@@ -35,10 +35,12 @@ function formatDate(date?: string) {
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const project = await getProjectById(resolvedParams.id);
+  const metadataTitle = project?.titleEn ?? project?.titleAr;
+  const metadataDescription = project?.descriptionEn ?? project?.descriptionAr;
 
   return {
-    title: project?.title ? `${project.title} | Project` : 'Project | Portfolio',
-    description: project?.description ?? 'Detailed view of a selected customer project.',
+    title: metadataTitle ? `${metadataTitle} | Project` : 'Project | Portfolio',
+    description: metadataDescription ?? 'Detailed view of a selected customer project.',
   };
 }
 
@@ -51,6 +53,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   }
 
   const completed = formatDate(project?.completionDate);
+  const projectTitle = project.titleEn ?? project.titleAr ?? 'Untitled project';
+  const projectDescription =
+    project.descriptionEn ??
+    project.descriptionAr ??
+    'A detailed view of the project, built to help customers understand the value and quality of the work.';
 
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100">
@@ -67,9 +74,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             <p className="text-sm uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
               {project?.client ?? <TranslatedText id="project.clientFallback" />}
             </p>
-            <h1 className="mt-3 text-4xl font-bold md:text-6xl">{project?.title ?? 'Untitled project'}</h1>
+            <h1 className="mt-3 text-4xl font-bold md:text-6xl">{projectTitle}</h1>
             <p className="mt-6 max-w-3xl text-base leading-8 text-zinc-600 dark:text-zinc-300 md:text-lg">
-              {project?.description ?? 'A detailed view of the project, built to help customers understand the value and quality of the work.'}
+              {projectDescription}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 text-sm text-zinc-500 dark:text-zinc-400">
@@ -85,7 +92,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           <div className="rounded-3xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/70 p-6">
             <h2 className="text-xl font-semibold"><TranslatedText id="projects.heading" /></h2>
             <div className="mt-5">
-              <ProjectImageGallery images={project?.images} title={project?.title} />
+              <ProjectImageGallery images={project?.images} title={projectTitle} />
             </div>
           </div>
         </div>

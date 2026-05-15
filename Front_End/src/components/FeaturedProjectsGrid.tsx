@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { useLanguage } from '../providers/LanguageProvider';
 
 type Project = {
@@ -19,7 +20,7 @@ type Project = {
 const item = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120, damping: 16 } },
-};
+} satisfies Variants;
 
 export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { projects: Project[]; fullWidth?: boolean }) {
   const router = useRouter();
