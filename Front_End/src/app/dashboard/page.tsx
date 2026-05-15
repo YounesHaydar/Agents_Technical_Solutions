@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent, SyntheticEvent } from 'react';
+import { useLanguage } from '../../providers/LanguageProvider';
 
 type Language = 'en' | 'ar';
 
@@ -85,23 +86,12 @@ const texts = {
 } as const;
 
 export default function DashboardPage() {
-  const [language] = useState<Language>(() => {
-    if (typeof window === 'undefined') {
-      return 'en';
-    }
-
-    return (localStorage.getItem('language') as Language | null) || 'en';
-  });
+  const { language } = useLanguage();
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const t = texts[(language === 'ar' ? 'ar' : 'en') as Language];
-
-  useEffect(() => {
-    document.documentElement.lang = language;
-    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-  }, [language]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
