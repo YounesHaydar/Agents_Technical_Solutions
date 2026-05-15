@@ -7,7 +7,7 @@ type Language = 'en' | 'ar';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  isRTL: boolean;
+  isRTL: boolean; // Great addition! You can use this in your components to flip icons.
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -15,27 +15,24 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>('en');
 
+  // 1. Initialize from localStorage on mount (Client-side only)
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') as Language | null;
     if (savedLanguage === 'en' || savedLanguage === 'ar') {
-      queueMicrotask(() => {
-        setLanguageState((prevLanguage) =>
-          prevLanguage === savedLanguage ? prevLanguage : savedLanguage,
-        );
-      });
+      setLanguageState(savedLanguage);
     }
   }, []);
 
+  // 2. Centralize side effects: Update DOM and Storage whenever state changes
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    localStorage.setItem('language', language);
   }, [language]);
 
+  // 3. Simplified setter function
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   };
 
   return (

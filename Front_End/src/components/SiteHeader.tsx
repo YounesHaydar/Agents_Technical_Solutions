@@ -19,7 +19,7 @@ export default function SiteHeader() {
             </span>
             <span>
               <span className="block text-xs uppercase tracking-widest text-muted">Technical Solutions</span>
-              <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Reliability-driven portfolio system</span>
+              <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-100">Reliability-driven portfolio system</span>
             </span>
           </Link>
 

@@ -26,18 +26,7 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
   const router = useRouter();
   const { language } = useLanguage();
 
-  async function handleDelete(id?: string) {
-    if (!id) return;
-    if (!confirm('Delete this project? This action cannot be undone.')) return;
-    try {
-      const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Delete failed');
-      router.refresh();
-    } catch (err) {
-      console.error(err);
-      alert('Failed to delete project');
-    }
-  }
+  // Delete action removed per UI update — deletion is handled elsewhere
 
   const getTitle = (project: Project) => {
     return language === 'ar' ? project.titleAr : project.titleEn;
@@ -78,51 +67,20 @@ export default function FeaturedProjectsGrid({ projects, fullWidth = false }: { 
                 <h3 className="text-2xl font-semibold text-white">{getTitle(p)}</h3>
               </div>
               
-              {/* Description overlay on hover */}
-              <motion.div
-                initial="hidden"
-                whileHover="visible"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { 
-                    opacity: 1,
-                    transition: { 
-                      staggerChildren: 0.1,
-                      type: 'spring', 
-                      stiffness: 120, 
-                      damping: 16 
-                    }
-                  }
-                }}
-                className="absolute inset-0 bg-black/85 p-6 flex flex-col justify-end"
-              >
-                <motion.p
-                  variants={{
-                    hidden: { y: 20, opacity: 0 },
-                    visible: { y: 0, opacity: 1 }
-                  }}
-                  className="text-sm text-white/95 leading-relaxed mb-4 dark:text-slate-100"
-                >
+              {/* Description overlay on hover (CSS-only) */}
+              <div className="absolute inset-0 bg-black/85 p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+                <p className="text-sm text-white/95 leading-relaxed mb-4 dark:text-slate-100">
                   {getDescription(p)}
-                </motion.p>
+                </p>
                 <div className="flex gap-4">
-                  <motion.button
+                  <button
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); e.preventDefault(); router.push(`/projects/${p._id ?? ''}`); }}
-                    variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
                     className="text-blue-400 hover:text-blue-300 font-semibold transition-colors w-fit bg-transparent"
                   >
                     Read More →
-                  </motion.button>
-
-                  <motion.button
-                    onClick={async (e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); e.preventDefault(); await handleDelete(p._id); }}
-                    variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
-                    className="text-red-400 hover:text-red-300 font-semibold transition-colors w-fit bg-transparent"
-                  >
-                    Delete
-                  </motion.button>
+                  </button>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </Link>
         </motion.div>
