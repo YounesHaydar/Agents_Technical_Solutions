@@ -9,9 +9,6 @@
   --accent-strong: #0f172a;
   --panel: rgba(255, 255, 255, 0.7);
 }
-html[dir="rtl"] {
-  font-family: var(--font-cairo), sans-serif;
-}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -54,6 +51,10 @@ body {
   font-family: var(--font-plex-sans), Arial, Helvetica, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-arabic-sans), var(--font-plex-sans), Arial, Helvetica, sans-serif;
 }
 
 ::selection {
@@ -313,6 +314,17 @@ body {
   font-family: var(--font-plex-serif), Georgia, serif;
 }
 
+html[dir="rtl"] .headline-serif,
+html[dir="rtl"] .mono-accent,
+html[dir="rtl"] .capability-title {
+  font-family: var(--font-arabic-sans), var(--font-plex-sans), Arial, Helvetica, sans-serif;
+}
+
 .mono-accent {
   font-family: var(--font-plex-mono), monospace;
+}
+
+/* Dark mode for projects showcase section - explicit gradient override */
+.dark #projects-showcase {
+  background: var(--background);
 }

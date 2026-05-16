@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import React from 'react';
+import { useLanguage } from '../providers/LanguageProvider';
 
 type TextId =
   | 'projects.heading'
@@ -46,14 +46,7 @@ const DICT: Record<string, { en: string; ar: string }> = {
 };
 
 export default function TranslatedText({ id }: { id: TextId }) {
-  const [language] = useState<'en' | 'ar'>(() => {
-    if (typeof window === 'undefined') {
-      return 'en';
-    }
-
-    const storedLanguage = localStorage.getItem('language') as 'en' | 'ar' | null;
-    return storedLanguage ?? (document.documentElement.lang === 'ar' ? 'ar' : 'en');
-  });
+  const { language } = useLanguage();
 
   const entry = DICT[id];
   if (!entry) return null;

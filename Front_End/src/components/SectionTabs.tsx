@@ -2,9 +2,11 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../providers/LanguageProvider';
 
 export default function SectionTabs() {
   type SectionId = 'about' | 'services' | 'projects-showcase';
+  const { language } = useLanguage();
 
   const [visible, setVisible] = useState(false);
   const [active, setActive] = useState<SectionId | null>(null);
@@ -107,13 +109,13 @@ export default function SectionTabs() {
       <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-12">
         <div ref={containerRef} className="tabs-wrap flex items-center gap-3 rounded-full bg-white/90 dark:bg-slate-900/70 px-3 py-2 shadow-sm relative">
           <a ref={(el) => { tabsRef.current[0] = el; }} href="#about" className={`px-3 py-1 text-sm font-medium ${active === 'about' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
-            Overview
+            {language === 'ar' ? 'نظرة عامة' : 'Overview'}
           </a>
           <a ref={(el) => { tabsRef.current[1] = el; }} href="#services" className={`px-3 py-1 text-sm font-medium ${active === 'services' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
-            Services
+            {language === 'ar' ? 'الخدمات' : 'Services'}
           </a>
           <a ref={(el) => { tabsRef.current[2] = el; }} href="#projects-showcase" className={`px-3 py-1 text-sm font-medium ${active === 'projects-showcase' ? 'text-sky-700 dark:text-sky-300' : 'text-slate-800 dark:text-slate-100'}`}>
-            Projects
+            {language === 'ar' ? 'المشاريع' : 'Projects'}
           </a>
           <motion.span
             className="tab-indicator"
@@ -122,7 +124,7 @@ export default function SectionTabs() {
             transition={{ type: 'spring', stiffness: 280, damping: 26 }}
             style={{ position: 'absolute' }}
           />
-          <span className="sr-only" aria-live="polite">{active ? `Active section: ${active}` : ''}</span>
+          <span className="sr-only" aria-live="polite">{active ? (language === 'ar' ? `القسم النشط: ${active}` : `Active section: ${active}`) : ''}</span>
         </div>
       </div>
     </div>

@@ -9,34 +9,89 @@ import RevealOnScroll from "../components/RevealOnScroll";
 import { getProjects } from "../lib/sanity";
 import { motion } from "framer-motion";
 import type { Project } from "../types";
+import { useLanguage } from "../providers/LanguageProvider";
 
-const services = [
-  {
-    title: "Customer websites",
-    description:
-      "Fast, responsive sites designed to present services clearly and convert visitors into leads.",
+const content = {
+  en: {
+    aboutLabel: 'About us:',
+    aboutTitle: 'A team of Engineers dedicated to solve all your technical problems and provide the best service to increase your traction and profits all around.',
+    aboutCopy: 'The layout is built like a product system: controlled spacing, clear hierarchy, deep surfaces, and a restrained accent palette.',
+    servicesLabel: 'Services',
+    services: [
+      {
+        title: 'Customer websites',
+        description: 'Fast, responsive sites designed to present services clearly and convert visitors into leads.',
+      },
+      {
+        title: 'Portfolio showcases',
+        description: 'Project galleries that surface proof of work with a sharper editorial structure.',
+      },
+      {
+        title: 'Sanity CMS setup',
+        description: 'Editable content structures so teams can update projects without touching code.',
+      },
+    ],
+    processLabel: 'Process',
+    processTitle: 'A calm workflow with visible structure.',
+    processCopy: 'Each step is presented as a controlled system, which makes the site feel more reliable and more technical.',
+    workflowSteps: [
+      'Understand the customer and their goals',
+      'Map the service story and proof points',
+      'Build the site in Next.js with Sanity content',
+      'Publish with a durable editing workflow',
+    ],
+    nextStepLabel: 'Next step',
+    nextStepTitle: 'Build the next version around your actual content.',
+    nextStepCopy: 'The current system can now scale into a more specific brand direction without losing clarity or editorial discipline.',
+    exploreProjects: 'Explore projects',
+    backToTop: 'Back to top',
+    featuredWorkLabel: 'Featured work',
+    featuredWorkTitle: 'Recent projects',
+    viewAllProjects: 'View all projects',
   },
-  {
-    title: "Portfolio showcases",
-    description:
-      "Project galleries that surface proof of work with a sharper editorial structure.",
+  ar: {
+    aboutLabel: 'من نحن:',
+    aboutTitle: 'فريق من المهندسين مكرس لحل جميع مشاكلك التقنية وتقديم أفضل خدمة لزيادة التفاعل والأرباح في كل مكان.',
+    aboutCopy: 'تم بناء الواجهة كنظام منتج: مسافات مضبوطة، وتسلسل بصري واضح، وسطح عميق، ولوحة ألوان هادئة.',
+    servicesLabel: 'الخدمات',
+    services: [
+      {
+        title: 'مواقع للعملاء',
+        description: 'مواقع سريعة ومتجاوبة تعرض الخدمات بوضوح وتحوّل الزوار إلى عملاء محتملين.',
+      },
+      {
+        title: 'معارض أعمال',
+        description: 'معارض مشاريع تبرز جودة العمل ضمن بنية تحريرية أوضح.',
+      },
+      {
+        title: 'إعداد Sanity CMS',
+        description: 'هياكل محتوى قابلة للتحرير حتى يتمكن الفريق من تحديث المشاريع دون لمس الكود.',
+      },
+    ],
+    processLabel: 'العملية',
+    processTitle: 'سير عمل هادئ ببنية واضحة.',
+    processCopy: 'يُعرض كل خطوة كنظام مضبوط، ما يجعل الموقع يبدو أكثر موثوقية واحترافية.',
+    workflowSteps: [
+      'فهم العميل وأهدافه',
+      'رسم قصة الخدمة ونقاط الإثبات',
+      'بناء الموقع باستخدام Next.js وSanity',
+      'الإطلاق عبر سير تحرير مستقر',
+    ],
+    nextStepLabel: 'الخطوة التالية',
+    nextStepTitle: 'ابنِ النسخة التالية حول محتواك الحقيقي.',
+    nextStepCopy: 'يمكن للنظام الحالي أن يتوسع الآن نحو هوية أدق دون أن يفقد وضوحه أو انضباطه التحريري.',
+    exploreProjects: 'استعرض المشاريع',
+    backToTop: 'العودة إلى الأعلى',
+    featuredWorkLabel: 'الأعمال المميزة',
+    featuredWorkTitle: 'المشاريع الأخيرة',
+    viewAllProjects: 'عرض جميع المشاريع',
   },
-  {
-    title: "Sanity CMS setup",
-    description:
-      "Editable content structures so teams can update projects without touching code.",
-  },
-];
-
-const workflowSteps = [
-  "Understand the customer and their goals",
-  "Map the service story and proof points",
-  "Build the site in Next.js with Sanity content",
-  "Publish with a durable editing workflow",
-];
+} as const;
 
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const { language } = useLanguage();
+  const t = content[language];
 
   useEffect(() => {
     getProjects().then((data) => {
@@ -65,32 +120,24 @@ export default function HomePage() {
           <div
             id="about"
             data-reveal
+            suppressHydrationWarning
             className="glass-panel panel-border rounded-4xl p-6 md:p-8 reveal-right"
           >
-            <p className="mono-accent text-xs uppercase tracking-widest text-muted">
-              About this site
-            </p>
-            <h2 className="headline-serif mt-4 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
-              A portfolio that explains the value of the work, not just the
-              visuals.
-            </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-300">
-              The layout is built like a product system: controlled spacing,
-              clear hierarchy, deep surfaces, and a restrained accent palette.
-            </p>
+            <p className="mono-accent text-xs uppercase tracking-widest text-muted">{t.aboutLabel}</p>
+            <h2 className="headline-serif mt-4 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">{t.aboutTitle}</h2>
+            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-300">{t.aboutCopy}</p>
           </div>
 
           <div
             id="services"
             data-reveal
+            suppressHydrationWarning
             className="glass-panel panel-border rounded-4xl p-6 md:p-8 reveal-left"
             style={{ animationDelay: "120ms" }}
           >
-            <p className="mono-accent text-xs uppercase tracking-widest text-muted">
-              Services
-            </p>
+            <p className="mono-accent text-xs uppercase tracking-widest text-muted">{t.servicesLabel}</p>
             <div className="mt-5 grid gap-3">
-              {services.map((service, index) => (
+              {t.services.map((service, index) => (
                 <motion.div
                   key={service.title}
                   initial={{ opacity: 1, x: 0 }}
@@ -128,20 +175,17 @@ export default function HomePage() {
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="mono-accent text-xs uppercase tracking-widest text-muted">
-                Process
+                {t.processLabel}
               </p>
-              <h2 className="headline-serif mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
-                A calm workflow with visible structure.
-              </h2>
+              <h2 className="headline-serif mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">{t.processTitle}</h2>
             </div>
             <div className="hidden max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-400 md:block">
-              Each step is presented as a controlled system, which makes the
-              site feel more reliable and more technical.
+              {t.processCopy}
             </div>
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {workflowSteps.map((step, index) => (
+            {t.workflowSteps.map((step, index) => (
               <div
                 key={step}
                 className="group rounded-3xl border border-slate-200/80 bg-white/70 p-5 transition duration-300 hover:-translate-y-1 hover:border-sky-400/40 hover:shadow-xl dark:border-slate-800 dark:bg-slate-950/55"
@@ -149,7 +193,7 @@ export default function HomePage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="text-xs uppercase tracking-widest text-muted">
-                    Step
+                    {language === 'ar' ? 'خطوة' : 'Step'}
                   </div>
                   <div className="mono-accent text-sm text-sky-700 dark:text-sky-300">
                     0{index + 1}
@@ -176,15 +220,10 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="mono-accent text-xs uppercase tracking-widest text-muted">
-                Next step
+                {t.nextStepLabel}
               </p>
-              <h2 className="headline-serif mt-4 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
-                Build the next version around your actual content.
-              </h2>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300">
-                The current system can now scale into a more specific brand
-                direction without losing clarity or editorial discipline.
-              </p>
+              <h2 className="headline-serif mt-4 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">{t.nextStepTitle}</h2>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300">{t.nextStepCopy}</p>
             </div>
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -192,13 +231,13 @@ export default function HomePage() {
                 href="/projects"
                 className="inline-flex items-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition duration-300 hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
               >
-                Explore projects
+                {t.exploreProjects}
               </Link>
               <a
                 href="#top"
                 className="inline-flex items-center rounded-full border border-slate-300/80 bg-white/70 px-6 py-3 text-sm font-semibold text-slate-800 transition duration-300 hover:-translate-y-0.5 hover:border-amber-400/60 hover:text-slate-950 dark:border-slate-700/80 dark:bg-slate-900/70 dark:text-slate-50"
               >
-                Back to top
+                {t.backToTop}
               </a>
             </div>
           </div>
@@ -208,16 +247,12 @@ export default function HomePage() {
       {/* 6. Projects Showcase Section */}
       <section
         id="projects-showcase"
-        className="w-full bg-linear-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900/50 py-24"
+        className="w-full bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900/50 py-24"
       >
         <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-12">
           <div className="mb-12">
-            <p className="mono-accent text-xs uppercase tracking-widest text-muted">
-              Featured work
-            </p>
-            <h2 className="headline-serif mt-4 text-4xl font-semibold tracking-tight text-slate-950 dark:text-zinc-50 md:text-5xl">
-              Recent projects
-            </h2>
+            <p className="mono-accent text-xs uppercase tracking-widest text-muted">{t.featuredWorkLabel}</p>
+            <h2 className="headline-serif mt-4 text-4xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-5xl">{t.featuredWorkTitle}</h2>
           </div>
           <div className="reveal-up">
             <FeaturedProjectsGrid projects={projects} fullWidth={true} />
@@ -228,7 +263,7 @@ export default function HomePage() {
                 href="/projects"
                 className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition duration-300 hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
               >
-                <span>View all projects</span>
+                <span>{t.viewAllProjects}</span>
                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                   →
                 </span>

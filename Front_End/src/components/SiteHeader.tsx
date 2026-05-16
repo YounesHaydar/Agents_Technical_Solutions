@@ -2,58 +2,86 @@
 
 import Link from 'next/link';
 import { useTheme } from '../providers/ThemeProvider';
-import { useLanguage } from '../providers/LanguageProvider';
+import { useLanguage, type Language } from '../providers/LanguageProvider';
 
 export default function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
+  const isArabic = language === 'ar';
+
+  const brand = language === 'ar'
+     ? { title: 'أيجنت للحلول التقنية', subtitle: 'نظام عروض أعمال يعتمد على الوضوح والموثوقية', studio: 'استوديو مباشر' }
+     : { title: "Agent's Technical Solutions", subtitle: 'Clear, reliable work showcases', studio: 'Live Studio' };
+  const brandAlt = language === 'ar'
+     ? { title: "Agent's Technical Solutions", subtitle: 'Clear, reliable work showcases' }
+     : { title: 'أيجنت للحلول التقنية', subtitle: 'نظام عروض أعمال يعتمد على الوضوح والموثوقية' };
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-white/70 backdrop-blur-xl transition-colors dark:bg-slate-950/70">
       <div className="mx-auto w-full max-w-7xl px-6 py-4 md:px-10 lg:px-12">
         <div className="glass-panel panel-border flex items-center justify-between gap-4 rounded-2xl px-4 py-3 md:px-5">
-          <Link href="/" className="group flex items-center gap-3 text-zinc-950 dark:text-zinc-100">
-            <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-linear-to-br from-sky-600 via-blue-700 to-slate-900 text-white shadow-lg shadow-blue-900/20">
+          <Link
+            href="/"
+            className="group flex items-center gap-3 text-zinc-950 dark:text-zinc-100"
+            aria-label={brand.title}
+          >
+            <span
+              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-linear-to-br from-sky-600 via-blue-700 to-slate-900 text-white shadow-lg shadow-blue-900/20"
+              aria-hidden
+            >
               <span className="absolute inset-0 shine opacity-60" />
-              <span className="relative text-sm font-bold tracking-widest">TS</span>
+              {theme === 'light' ? (
+                <svg className="h-5 w-5 text-yellow-300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M12 4V2M12 22v-2M4.93 4.93L3.51 3.51M20.49 20.49l-1.42-1.42M4 12H2m20 0h-2M4.93 19.07l-1.42 1.42M20.49 3.51l-1.42 1.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              ) : (
+                <span className="relative text-sm font-bold tracking-widest">AG</span>
+              )}
             </span>
             <span>
-              <span className="block text-xs uppercase tracking-widest text-muted">Technical Solutions</span>
-              <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-100">Reliability-driven portfolio system</span>
+              <span className="block text-xs uppercase tracking-widest text-muted">{brand.title}</span>
+              <span className="block text-[11px] text-muted mt-0.5">{brandAlt.title}</span>
             </span>
           </Link>
 
           <div className="flex items-center gap-3">
             <span className="hidden rounded-full border border-sky-500/20 bg-sky-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sky-700 dark:text-sky-200 md:inline-flex">
-              Live studio
+              {brand.studio}
             </span>
-            {/* Theme Toggle */}
+            {/* Theme Toggle (sun / moon) */}
             <button
               type="button"
               onClick={toggleTheme}
-              className="group rounded-full border border-slate-300/70 bg-white/80 p-2 text-zinc-950 shadow-sm shadow-slate-900/5 transition duration-300 hover:-translate-y-0.5 hover:border-sky-400/60 hover:shadow-lg hover:shadow-sky-900/10 dark:border-slate-700/80 dark:bg-slate-900/70 dark:text-zinc-100"
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              aria-pressed={theme === 'dark'}
+              aria-label={language === 'ar' ? (theme === 'dark' ? 'التبديل إلى الوضع الفاتح' : 'التبديل إلى الوضع الليلي') : (theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode')}
+              title={language === 'ar' ? (theme === 'dark' ? 'التبديل إلى الوضع الفاتح' : 'التبديل إلى الوضع الليلي') : (theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode')}
+              className="group rounded-full border border-slate-300/70 bg-white/95 p-2 text-zinc-900 shadow-sm shadow-slate-900/6 transition duration-200 hover:scale-105 dark:border-slate-700/80 dark:bg-slate-800/80 dark:text-zinc-50"
             >
               {theme === 'dark' ? (
-                <svg className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                // Moon icon for dark mode (button shows moon when active)
+                <svg className="h-6 w-6 text-indigo-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               ) : (
-                <svg className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1hm0 5a1 1 0 011 1v1a1 1 0 11-2 0V9a1 1 0 011-1zm0 5a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm3.314-3a1 1 0 101.414 1.414l1.414-1.414a1 1 0 00-1.414-1.414l-1.414 1.414zM15 7a1 1 0 011 1h1a1 1 0 11 0 2h-1a1 1 0 11-2 0v-1a1 1 0 011-1zm-11 8a1 1 0 100 2h1a1 1 0 100-2H4zM6.686 15.314a1 1 0 10-1.414-1.414l-1.414 1.414a1 1 0 001.414 1.414l1.414-1.414z" clipRule="evenodd" />
+                // Sun icon for light mode
+                <svg className="h-6 w-6 text-yellow-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               )}
             </button>
 
-            {/* Language Toggle */}
-            <button
-              type="button"
-              onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
-              className="rounded-full border border-slate-300/70 bg-white/80 px-4 py-2 text-sm font-medium text-zinc-950 shadow-sm shadow-slate-900/5 transition duration-300 hover:-translate-y-0.5 hover:border-amber-400/60 hover:shadow-lg hover:shadow-amber-900/10 dark:border-slate-700/80 dark:bg-slate-900/70 dark:text-zinc-100"
-              title={`Switch to ${language === 'en' ? 'Arabic' : 'English'}`}
+            <label className="sr-only">{language === 'ar' ? 'اختيار اللغة' : 'Language selector'}</label>
+            <select
+              aria-label={language === 'ar' ? 'اختيار اللغة' : 'Language selector'}
+              value={language}
+              onChange={(e) => setLanguage(e.currentTarget.value as Language)}
+              className="rounded-md border border-slate-300/70 bg-white/95 px-3 py-1 text-sm font-medium text-zinc-900 shadow-sm transition duration-150 dark:border-slate-700/80 dark:bg-slate-800/80 dark:text-zinc-50"
             >
-              {language === 'en' ? 'العربية' : 'English'}
-            </button>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+            </select>
           </div>
         </div>
       </div>

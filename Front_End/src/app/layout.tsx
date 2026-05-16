@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif, Cairo } from "next/font/google";
+import localFont from "next/font/local";
+import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
 import AppProviders from "../components/AppProviders";
 import ScrollToTopOnMount from "../components/ScrollToTopOnMount";
@@ -22,16 +23,37 @@ const plexSerif = IBM_Plex_Serif({
   weight: ["400", "500", "600", "700"],
 });
 
-// 1. Initialize the modern Arabic font
-const cairo = Cairo({
-  variable: "--font-cairo",
-  subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700", "800"],
+// 1. Initialize the local Madani Arabic font files
+const arabicSans = localFont({
+  variable: "--font-arabic-sans",
+  src: [
+    {
+      path: "../../public/fonts/MadaniArabicDEMO-Thin.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/MadaniArabicDEMO-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/MadaniArabicDEMO-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/MadaniArabicDEMO-Black.otf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: 'Technical Solutions',
-  description: 'Customer-focused websites and portfolio showcases built with Next.js and Sanity.',
+  title: 'الحلول التقنية',
+  description: 'مواقع ويب ومعارض أعمال موجهة للعملاء مبنية باستخدام Next.js وSanity.',
 };
 
 export default function RootLayout({
@@ -41,10 +63,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ar"
+      dir="rtl"
       data-scroll-behavior="smooth"
-      // 2. Inject the Cairo variable into the HTML class list
-      className={`${plexSans.variable} ${plexMono.variable} ${plexSerif.variable} ${cairo.variable} h-full antialiased`}
+      className={`${plexSans.variable} ${plexMono.variable} ${plexSerif.variable} ${arabicSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col transition-colors">

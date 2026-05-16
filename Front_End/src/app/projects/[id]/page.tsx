@@ -26,7 +26,7 @@ function formatDate(date?: string) {
     return null;
   }
 
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat('ar', {
     month: 'long',
     year: 'numeric',
   }).format(parsedDate);
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
   const metadataDescription = project?.descriptionEn ?? project?.descriptionAr;
 
   return {
-    title: metadataTitle ? `${metadataTitle} | Project` : 'Project | Portfolio',
-    description: metadataDescription ?? 'Detailed view of a selected customer project.',
+    title: metadataTitle ? `${metadataTitle} | مشروع` : 'مشروع | معرض الأعمال',
+    description: metadataDescription ?? 'عرض تفصيلي لمشروع عميل محدد.',
   };
 }
 
@@ -53,11 +53,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   }
 
   const completed = formatDate(project?.completionDate);
-  const projectTitle = project.titleEn ?? project.titleAr ?? 'Untitled project';
+  const projectTitle = project.titleAr ?? project.titleEn ?? 'مشروع بلا عنوان';
   const projectDescription =
-    project.descriptionEn ??
     project.descriptionAr ??
-    'A detailed view of the project, built to help customers understand the value and quality of the work.';
+    project.descriptionEn ??
+    'عرض تفصيلي للمشروع لمساعدة العملاء على فهم قيمة العمل وجودته.';
 
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100">
@@ -84,7 +84,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 {completed ?? <TranslatedText id="completion.unavailable" />}
               </span>
               <span className="rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 px-4 py-2">
-                {project?.socialLinks?.length ? `${project.socialLinks.length} links` : <TranslatedText id="project.noLinks" />}
+                {project?.socialLinks?.length ? `${project.socialLinks.length} روابط` : <TranslatedText id="project.noLinks" />}
               </span>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           <div className="rounded-3xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/70 p-6">
             <h2 className="text-xl font-semibold"><TranslatedText id="project.notes" /></h2>
             <p className="mt-4 leading-7 text-zinc-600 dark:text-zinc-300">
-              Use this area to explain the problem, the design decisions, and the results delivered for the customer.
+              استخدم هذه المساحة لشرح المشكلة، وقرارات التصميم، والنتائج التي تم تسليمها للعميل.
             </p>
           </div>
         </div>

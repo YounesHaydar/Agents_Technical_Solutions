@@ -22,7 +22,7 @@ export default async function ProjectsPage() {
             href="/"
             className="mt-8 inline-flex rounded-full border border-zinc-300 dark:border-zinc-700 px-5 py-3 text-sm font-medium text-zinc-950 dark:text-zinc-100 transition hover:bg-zinc-100 dark:hover:bg-zinc-900"
           >
-            Back to home
+            <TranslatedText id="projects.back" />
           </Link>
         </div>
       </section>

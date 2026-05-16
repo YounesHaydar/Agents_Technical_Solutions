@@ -1,6 +1,7 @@
 'use client';
 
 import { useLanguage } from '../providers/LanguageProvider';
+import { useTheme } from '../providers/ThemeProvider';
 import Link from 'next/link';
 
 const content = {
@@ -8,38 +9,49 @@ const content = {
     badge: 'Engineering-grade web development',
     headline: 'High-Performance Websites for Technical Teams.',
     description: 'Built with Next.js & Sanity in 4 Weeks. We transform complex requirements into fast, reliable, and scalable web experiences.',
-    servicesTitle: 'Core Capabilities',
+    servicesTitle: 'Why do you need us?',
     services: [
       { name: 'Custom Web Apps', icon: '⚡' },
       { name: 'Headless CMS Integration', icon: '⚙️' },
-      { name: 'Performance Optimization', icon: '🚀' },
+      {
+        name: 'Connecting your business to the network',
+        icon: '🚀',
+        description: 'Connecting into the grid to increase profits and business volume.',
+      },
       { name: 'Technical SEO', icon: '🔍' },
     ],
     ctaPrimary: 'Get a Free Technical Audit',
     ctaSecondary: 'View my work',
     trust: 'Trusted by innovative teams worldwide',
-    rating: '5.0 ★ rating from our clients',
+    ratingScore: '4.8',
+    ratingLabel: 'rating from our clients',
   },
   ar: {
     badge: 'تطوير ويب بمعايير هندسية',
     headline: 'مواقع ويب عالية الأداء للفرق التقنية.',
     description: 'نطوّر مواقع ويب سريعة وموثوقة وقابلة للتوسّع باستخدام Next.js وSanity خلال أربعة أسابيع. نحوّل المتطلبات المعقّدة إلى تجارب رقمية واضحة وفعّالة.',
-    servicesTitle: 'القدرات الأساسية',
+    servicesTitle: 'لماذا تحتاجنا؟',
     services: [
       { name: 'تطبيقات ويب مخصصة', icon: '⚡' },
       { name: 'تكامل مع نظام إدارة محتوى منفصل', icon: '⚙️' },
-      { name: 'تحسين الأداء', icon: '🚀' },
+      {
+        name: 'ربط أعمالك بالشبكة',
+        icon: '🚀',
+        description: 'الارتباط بالشبكة لزيادة الأرباح وحجم الأعمال.',
+      },
       { name: 'تحسين محركات البحث التقني', icon: '🔍' },
     ],
     ctaPrimary: 'احصل على تدقيق تقني مجاني',
     ctaSecondary: 'اطّلع على أعمالي',
     trust: 'موثوق لدى فرق مبتكرة حول العالم',
-    rating: 'تقييم 5.0 نجوم من عملائنا',
+    ratingScore: '4.8',
+    ratingLabel: 'من عملائنا',
   },
 };
 
 export default function HeroSection() {
   const { language, isRTL } = useLanguage();
+  const { theme } = useTheme();
   const t = content[language];
 
   return (
@@ -68,9 +80,9 @@ export default function HeroSection() {
               {t.ctaPrimary}
             </Link>
             <Link
-              href="#projects"
-              // FIXED: Explicit text colors for both modes and borders that adapt
-              className="rounded-full border border-zinc-300 px-8 py-4 text-sm font-medium text-zinc-900 transition hover:border-zinc-400 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:border-zinc-500 dark:hover:bg-zinc-900"
+              href="#projects-showcase"
+              style={theme === 'dark' ? { color: '#ffffff' } : undefined}
+              className="rounded-full border border-zinc-300 px-8 py-4 text-sm font-medium text-zinc-900 transition hover:border-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-600 dark:bg-zinc-950 dark:text-white! dark:hover:border-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-white!"
             >
               {t.ctaSecondary}
             </Link>
@@ -83,7 +95,13 @@ export default function HeroSection() {
               <div className="h-8 w-8 rounded-full border-2 border-white dark:border-zinc-950 bg-zinc-500 dark:bg-zinc-600"></div>
             </div>
             <div className="flex flex-col">
-              <span style={{ color: 'var(--foreground)' }}>{t.rating}</span>
+              <span className="inline-flex flex-wrap items-center gap-1 whitespace-nowrap" style={{ color: 'var(--foreground)' }}>
+                <span dir="ltr" className="font-semibold tabular-nums">
+                  {t.ratingScore}
+                </span>
+                <span>{language === 'ar' ? 'تقييم' : 'rating'}</span>
+                <span>{t.ratingLabel}</span>
+              </span>
               <span className="text-xs" style={{ color: 'var(--muted)' }}>{t.trust}</span>
             </div>
           </div>
@@ -101,12 +119,19 @@ export default function HeroSection() {
             {t.services.map((service, idx) => (
               <div
                 key={idx}
-                className="capability-item flex items-center gap-4 rounded-2xl border p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-100 dark:hover:border-zinc-700 dark:hover:bg-zinc-800"
+                className="capability-item flex items-start gap-4 rounded-2xl border p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-100 dark:hover:border-zinc-700 dark:hover:bg-zinc-800"
               >
                 <div className="capability-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border">
                   <span className="text-xl">{service.icon}</span>
                 </div>
-                <h3 className="capability-title font-semibold">{service.name}</h3>
+                <div className="min-w-0">
+                  <h3 className="capability-title font-semibold">{service.name}</h3>
+                  {service.description ? (
+                    <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                      {service.description}
+                    </p>
+                  ) : null}
+                </div>
               </div>
             ))}
           </div>
